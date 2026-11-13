@@ -1,104 +1,83 @@
-# Aula de Node.js - Módulos com require
+# O Repertório da Turma
 
-Este repositório mostra um exemplo simples de como o Node.js importa e exporta módulos usando o sistema CommonJS, com a função `require()`.
+Aplicação de karaokê desenvolvida em Node.js e Express como projeto integrador de Programação III.
 
-## O que é um módulo?
+## Tecnologias
 
-Em Node.js, qualquer arquivo `.js` pode ser um módulo.
-Um módulo é um pedaço de código que pode exportar funções, classes ou valores.
-Quando outro arquivo precisa desse código, ele usa `require()` para importar.
+- Node.js (versão 20 ou superior)
+- Express
+- JavaScript no navegador
+- Supabase (integração ainda pendente de configuração e validação)
 
-## Como funciona a exportação (`module.exports`)
+## Requisitos
 
-No arquivo `Calc.js`, o módulo exporta duas coisas:
+- Node.js 20 ou superior
+- npm
 
-- a classe `Calc`
-- a função `umaFuncParaExportar`
+## Instalação e execução local
 
-```js
-module.exports = { Calc, umaFuncParaExportar };
-```
+1. Entre nesta pasta do projeto:
 
-Isso significa que outro arquivo pode usar exatamente esses itens.
-O `Calc.js` também pode ter código interno que não é exportado.
-Ele fica privado dentro do módulo.
+   ```bash
+   cd aula-nodejs-1-T1-main
+   ```
 
-## Como funciona a importação (`require()`)
+2. Instale as dependências:
 
-No arquivo `index.js`, nós usamos:
+   ```bash
+   npm install
+   ```
 
-```js
-const { Calc, umaFuncParaExportar } = require('./Calc');
-```
+3. Inicie o servidor:
 
-Veja o que acontece:
+   ```bash
+   npm start
+   ```
 
-1. `require('./Calc')` diz ao Node.js: "abra o arquivo `Calc.js`".
-2. O Node executa o código do arquivo e lê o que foi colocado em `module.exports`.
-3. O resultado é um objeto com as propriedades exportadas.
-4. `const { Calc, umaFuncParaExportar } = ...` pega essas propriedades do objeto.
+4. Acesse no navegador:
 
-Assim, `Calc` e `umaFuncParaExportar` ficam disponíveis em `index.js`.
+   ```text
+   http://localhost:3000
+   ```
 
-## Exemplo prático no repositório
+Durante o desenvolvimento, também é possível usar `npm run dev` para iniciar o servidor com reinicialização automática quando os arquivos mudarem.
 
-O `index.js` mostra como usar a classe importada:
+## Estrutura principal
 
-```js
-const calc = new Calc();
-console.log(calc.add(2, 2));
-console.log(calc.sub(3, 2));
-```
+- `app.js`: servidor Express e rotas HTTP.
+- `karaoke/musica.js`: classe que representa uma música.
+- `karaoke/parte.js`: classe que representa uma parte da música.
+- `karaoke/player.js`: música de demonstração e execução do player no terminal.
+- `DAO/MusicaDAO.js`: operações de listagem, busca, cadastro, edição e remoção em memória.
+- `public/index.html`: estrutura da interface web.
+- `public/estilo.css`: estilos da interface.
+- `public/player.js`: comportamento do player no navegador.
 
-E também usa a função exportada:
+## Configuração do Supabase
 
-```js
-console.log(umaFuncParaExportar('PROG III'));
-```
+O modelo de variáveis está em `.env.example`. Quando a integração com o Supabase for configurada:
 
-## Módulo local vs módulo npm
+1. Crie um arquivo local chamado `.env` nesta pasta.
+2. Preencha as variáveis com os dados do projeto Supabase.
+3. Mantenha o arquivo `.env` apenas no ambiente local: ele está listado no `.gitignore`.
 
-O projeto também traz outro tipo de importação:
+Nunca publique senhas, tokens ou chaves secretas. A chave usada em aplicações no navegador deve ser a chave pública apropriada, com as políticas de RLS configuradas no banco. Não use uma chave `service_role` no navegador.
 
-```js
-const chalk = require('chalk');
-```
+## Testes
 
-Esse é um módulo instalado pelo `npm` e não um arquivo do projeto.
-Ele fica dentro de `node_modules` e o Node o encontra automaticamente.
+O projeto possui o comando `npm test`, configurado para executar testes com o test runner nativo do Node.js. Os testes dos fluxos da aplicação ainda precisam ser escritos e executados.
 
-Use módulos locais quando o código estiver em seu próprio projeto.
-Use módulos npm quando precisar de bibliotecas prontas, como o `chalk`.
+## Estado do desenvolvimento
 
-## Passo a passo para rodar o projeto
+Este repositório ainda está em desenvolvimento. A interface inicial e o servidor Express existem, mas os fluxos abaixo precisam ser implementados e testados antes de considerar o projeto concluído:
 
-1. Instale as dependências (no mesmo diretório do projeto):
+- carregar a playlist pela API e selecionar uma música;
+- executar a música selecionada no player do navegador;
+- cadastrar, editar e excluir músicas pela interface;
+- validar os formulários e apresentar mensagens de erro;
+- integrar a persistência com o Supabase;
+- testar a persistência após reiniciar o servidor;
+- criar e executar testes automatizados;
+- configurar e verificar o deploy.
 
-```bash
-npm install
-```
-
-2. Execute o projeto:
-
-```bash
-node index.js
-```
-
-## Por que isso é útil?
-
-Separar o código em módulos ajuda a deixar o projeto organizado.
-Cada arquivo pode cuidar de uma parte diferente:
-
-- `Calc.js` contém a lógica da calculadora
-- `index.js` usa a calculadora e mostra o resultado
-- outros módulos podem ser adicionados sempre que necessário
-
-Isso é a base para construir projetos maiores em Node.js, mantendo o código fácil de entender e reutilizar.
-
-## Resumo rápido
-
-- `module.exports` define o que o módulo entrega para outros arquivos.
-- `require('./Calc')` carrega um módulo local.
-- `require('chalk')` carrega um módulo npm.
-- A desestruturação (`const { ... } = require(...)`) permite pegar só o que você precisa.
-- Node.js usa CommonJS nesse projeto, que é o padrão tradicional para módulos em Node.
+Consulte `DIAGNOSTICO-INTEGRADOR.md` para acompanhar os pontos pendentes. Marque uma etapa como concluída somente depois de implementá-la e conferir seu funcionamento.
