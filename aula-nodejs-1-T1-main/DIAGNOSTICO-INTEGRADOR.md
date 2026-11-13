@@ -24,12 +24,12 @@ Este arquivo e um roteiro de trabalho. Ele nao substitui as explicacoes, impleme
 - [ ] Atualizar o README com instalacao, configuracao, execucao, banco de dados e testes.
 - [ ] Fazer o deploy e testar a versao publicada.
 
-## Observacoes tecnicas encontradas na revisao inicial
+## Observacoes tecnicas
 
 - `public/player.js` ainda tem tarefas pendentes nas funcoes de carregar playlist, escolher musica e tocar.
-- O DAO atual guarda os dados em memoria; esses dados nao constituem persistencia em banco.
-- `app.js` executa operacoes de demonstracao do DAO assim que o servidor inicia. Avalie com a professora se esse trecho deve ficar apenas em testes.
-- A rota `GET /musicas/:id` atualmente devolve a musica do player, sem localizar o registro pelo identificador informado.
+- O DAO atual guarda os dados em memoria; isso nao e persistencia em banco.
+- `app.js` foi organizado para nao executar operacoes de demonstracao do DAO ao iniciar o servidor.
+- A rota `GET /musicas/:id` ainda devolve a musica do player sem localizar o registro pelo identificador informado.
 - O README atual descreve uma atividade de modulos Node.js, nao o funcionamento deste karaoke.
 
 ## Seguranca
@@ -52,4 +52,4 @@ Depois, abra `http://localhost:3000` no navegador.
 
 ## Como trabalhar neste roteiro
 
-Implemente um item por vez, teste-o e anote o que aprendeu. Antes de considerar uma etapa concluida, confira o comportamento no navegador e no terminal. Mantenha a branch `main` preservada ate revisar as alteracoes desta branch.
+Implemente um item por vez, teste-o e anote o que aprendeu. Antes de considerar uma etapa concluida, confira o comportamento no navegador e no terminal.
