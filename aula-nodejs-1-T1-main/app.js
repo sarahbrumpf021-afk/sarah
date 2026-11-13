@@ -2,6 +2,7 @@
 const express = require('express');
 const player = require('./karaoke/player');
 const { Parte } = require('./karaoke/parte');
+const musicaDAO = require('./DAO/MusicaDAO');
 
 const app = express();
 
@@ -15,13 +16,39 @@ app.get('/', (req, res) => {
     res.sendFile('index.html', { root: 'public' });
 });
 
-// Retorna a musica atualmente carregada no player.
-// A busca por ID e a listagem completa da playlist ainda precisam ser integradas.
-app.get('/musicas/:id', (req, res) => {
-    res.status(200).json(player.musica);
+// Cadastra a musica de demonstracao no catalogo em memoria.
+// Assim, a playlist da interface tem pelo menos uma musica para consultar.
+if (musicaDAO.listarTodas().length === 0) {
+    const musicaInicial = musicaDAO.inserir(player.musica.nome, player.musica.artista);
+    musicaInicial.partes = player.musica.partes;
+}
+
+// API utilizada pela interface web.
+app.get('/api/musicas', (req, res) => {
+    return res.status(200).json(musicaDAO.listarTodas());
 });
 
-// Retorna uma parte da musica atualmente carregada no player.
+app.get('/api/musicas/:id', (req, res) => {
+    const id = Number(req.params.id);
+
+    if (!Number.isInteger(id)) {
+        return res.status(400).json({ erro: 'ID de musica invalido.' });
+    }
+
+    const musica = musicaDAO.buscarPorId(id);
+
+    if (!musica) {
+        return res.status(404).json({ erro: 'Musica nao encontrada.' });
+    }
+
+    return res.status(200).json(musica);
+});
+
+// Rotas antigas da atividade de player no terminal, mantidas para compatibilidade.
+app.get('/musicas/:id', (req, res) => {
+    return res.status(200).json(player.musica);
+});
+
 app.get('/musicas/:id/partes/:parte', (req, res) => {
     const parteIndex = Number(req.params.parte);
 
